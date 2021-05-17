@@ -21,7 +21,7 @@ import System.Environment
 import Text.Printf
 
 -- Длины последовательностей
-ns = [10, 50, 100, 150, 200, 250, 300]
+ns = [10, 20, 30, 40, 50, 100, 200]
 
 entryPoint :: IO ()
 entryPoint = do
@@ -36,7 +36,7 @@ lineForP p n = do
     let m = avg rs
     let ci = confidenceIntervalGen p n 
     let k = round (fromIntegral n * p)
-    let pu = fromIntegral (puasson p (fromIntegral n) k) / fromIntegral n :: Double
+    let pu = fromIntegral (puasson n k) / fromIntegral n :: Double
     
     let flag = if m < p - ci || m > p + ci then "(!)" else ""
     putStrLn $ "p = " ++ roundToStr 1 p ++
@@ -63,13 +63,14 @@ comb n k =  product [n-k+1..n] `div` product [1..k]
 prob ::  Double -> Integer -> Integer -> Double
 prob p n k = fromInteger(comb n k) * p ** fromInteger k * (1 - p) ** fromInteger (n - k) 
 
--- доверительный интервал прямым подсчетом комбинаций p - вероятность успеха, n - длина серии,  k = 
-puasson p n k = f p n k (prob p n k) 1 
+-- доверительный интервал прямым подсчетом комбинаций n - длина серии,  k - число успехов 
+puasson n k = f n k (prob p n k) 1 
   where 
-  f p n k a d | a >= 0.95 = d 
-              | otherwise = f p n k (a + prob p n (k + d) + prob p n (k - d) ) (d + 1)
+  p = fromInteger k / fromInteger n    
+  f n k a d | a >= 0.95 = d 
+            | otherwise = f n k (a + prob p n (k + d) + prob p n (k - d) ) (d + 1)
 
-r = puasson 0.5 50 25
+r = puasson 50 25
 
 -- ------------------------------------------------
 
