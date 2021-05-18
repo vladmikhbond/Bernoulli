@@ -9,11 +9,13 @@ import Text.Printf
 ns = [10, 20, 30, 40, 50, 100, 200]
 
 entry :: IO ()
-entry = do
+entry = do        
+    putStrLn " n    00%  10%  20%  30%  40%  50%  60%  70%  80%  90% 100%"
     mapM_ lineForN ns     -- sequence_ $ map lineForN ns
     
 lineForN n = do
-    putStr $ "n = " ++ show n
+    let space = if n < 100 then " " else ""
+    putStr $ space ++ show n ++ " "
     sequence_ [elemForP (n * k `div` 10) n | k <- [0..10]]
     putStrLn ""
 

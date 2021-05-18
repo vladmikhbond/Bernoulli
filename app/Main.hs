@@ -1,7 +1,7 @@
 module Main where
 
-import Lib ( entryPoint )
-import Puasson ( entry )
+import Lib ( entry )
+--import Puasson ( entry )
 
 main :: IO ()
 main = entry

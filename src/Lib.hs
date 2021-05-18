@@ -13,7 +13,7 @@
 ------------------------------------------------------------------------------------}
 
 module Lib
-    ( entryPoint
+    ( entry
     ) where
 
 import System.Random
@@ -23,8 +23,8 @@ import Text.Printf
 -- Длины последовательностей
 ns = [10, 20, 30, 40, 50, 100, 200]
 
-entryPoint :: IO ()
-entryPoint = do
+entry :: IO ()
+entry = do
     mapM_ tableForN ns     -- sequence_ $ map tableForN ns
     
 tableForN n = do
@@ -38,12 +38,14 @@ lineForP p n = do
     let k = round (fromIntegral n * p)
     let pu = fromIntegral (puasson n k) / fromIntegral n :: Double
     
-    let flag = if m < p - ci || m > p + ci then "(!)" else ""
+    let flag1 = if m < p - ci || m > p + ci then "!" else ""
+    let flag2 = if m < p - pu || m > p + pu then "!!" else ""
+
     putStrLn $ "p = " ++ roundToStr 1 p ++
          "   m = " ++ roundToStr 2 m ++
          "   ci = " ++ roundToStr 2 ci ++
         "    pu = " ++ roundToStr 2 pu ++
-         flag 
+         flag1 ++ flag2
          
 avg ::  [Int] -> Double
 avg xs = fromIntegral (sum xs) / fromIntegral (length xs)
